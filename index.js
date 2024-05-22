@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -17,7 +18,7 @@ const limiter = rateLimit({
 })
 app.use(limiter);
 
-const uri = "mongodb+srv://abuyeahia24:iQykWr4ojEQSIAca@cluster0.l1yuqhx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.l1yuqhx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Connect to MongoDB
 mongoose.connect(uri, {
