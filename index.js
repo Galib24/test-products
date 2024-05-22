@@ -2,11 +2,20 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const { ObjectId } = require('mongodb');
+const rateLimit = require('express-rate-limit')
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+
+// limit of 10 request per second for one users
+const limiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 10,
+    message: 'too many request coming by you sir please try again later' 
+})
+app.use(limiter);
 
 const uri = "mongodb+srv://abuyeahia24:iQykWr4ojEQSIAca@cluster0.l1yuqhx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
@@ -86,8 +95,8 @@ app.get('/user-products', async (req, res) => {
         const userProductCount = await monModel.aggregate([
             {
                 $group: {
-                    _id: "$email",  // Group by email
-                    totalProducts: { $sum: 1 }  // Count the number of documents for each user
+                    _id: "$email",  
+                    totalProducts: { $sum: 1 }  
                 }
             }
         ]);
@@ -104,7 +113,7 @@ app.get('/user-products', async (req, res) => {
 app.put('/update/:id', async (req, res) => {
     try {
         const id = parseInt(req.params.id);
-        const filter = { _id: new ObjectId(id) }; // Get the id parameter from the URL
+        const filter = { _id: new ObjectId(id) }; 
         console.log(`Updating document with id: ${filter}`);
 
         const updateData = {
@@ -113,7 +122,7 @@ app.put('/update/:id', async (req, res) => {
             email: req.body.email,
         };
 
-        const options = { upsert: true }; // Use options to return the updated document
+        const options = { upsert: true }; 
 
         const result = await monModel.updateOne(filter, updateData, options);
         if (result) {
@@ -145,6 +154,8 @@ app.delete('/update/:id', async (req, res) => {
 
 
 
+
+// server setup
 
 
 
