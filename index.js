@@ -13,7 +13,7 @@ app.use(express.json());
 const limiter = rateLimit({
     windowMs: 60 * 1000,
     max: 10,
-    message: 'too many request coming by you sir please try again later' 
+    message: 'too many request coming by you  please try again later' 
 })
 app.use(limiter);
 
@@ -88,7 +88,7 @@ app.get('/data', async (req, res) => {
 })
 
 
-// get data how count of product select one person
+// get data how count of product select one person we also can define  unique person my email query
 
 app.get('/user-products', async (req, res) => {
     try {
